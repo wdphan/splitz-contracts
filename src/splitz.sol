@@ -11,16 +11,6 @@ pragma solidity >=0.7.0 <0.9.0;
 
 contract Splitz {
 
-    struct Split {
-        address payable owner;
-        address [] recipients;
-    }
-
-   
-
-    // history of splits in array
-    address payable [] public allSplits;
-
     // stores list of recipients and their ids
     address payable [] public recipients;
 
@@ -36,10 +26,6 @@ contract Splitz {
         _;
     }
 
-    constructor() {
-        
-    }
-
     receive() payable external {
         uint256 share = msg.value / recipients.length;
          for (uint i=0; i< recipients.length; i++){
@@ -48,28 +34,21 @@ contract Splitz {
          emit TransferReceived(msg.sender, msg.value);
     }
 
-    function createSplit (address payable _owner, address payable[] memory newRecipients) external {
+    function createSplit (address payable _owner, address payable [] memory newRecipients) external {
+
         for(uint i=0; i<newRecipients.length; i++) {
             recipients.push(newRecipients[i]);
         }
+        // sets splitOwner
         splitOwner = _owner;
-
-        Split memory split = Split(splitOwner, newRecipients);
-        allSplits.push(split);
-
-
-        // Split memory split;
-        // // create a struct
-        // split.owner = _owner;
-        // split.recipients = newRecipients;
-        // // stores struct in array
-        // allSplits.push(_owner, newRecipients);
     }
 
+    // add recipient with address
     function addRecipient( address payable newRecipient) external {
         recipients.push(newRecipient);
     }
 
+    // remove recipient with address
     function removeRecipient(address payable recipient) external {
         uint index = addressToUint[recipient];
 
@@ -88,17 +67,5 @@ contract Splitz {
     function splitRecipientCount() public view returns (uint) {
         return recipients.length;
     }
-
-    function splitHistory() public view returns (address payable [] memory) {
-        return allSplits;
-    }
-
-    // function SplitHistory
-
-    // function SplitHistoryCount
-
-
-
-
 
 }
