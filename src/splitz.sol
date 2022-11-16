@@ -15,7 +15,7 @@ contract Splitz {
     //     address owner;
     //     address payable [] recipients;
     // }
-
+    // stores list of recipients and their ids
     address payable [] public recipients;
 
     event TransferReceived(address _from, uint _amount);
@@ -57,13 +57,16 @@ contract Splitz {
         recipients.push(newRecipient);
     }
 
-    // function removeRecipient(address recipient) external {
-    //     uint id = addressToUint[recipient];
-    //     for(uint i=0; i<recipients.length; i++) {
-    //         recipients.pop(recipient[i]);
-    //     }
-    //     delete recipients[id];
-    // }
+    function removeRecipient(address payable recipient) external {
+        uint index = addressToUint[recipient];
+
+       require(index < recipients.length, "index out of bound");
+
+        for (uint i = index; i < recipients.length - 1; i++) {
+            recipients[i] = recipients[i + 1];
+        }
+        recipients.pop();
+    }
 
     function splitRecipients() public view returns (address payable [] memory) {
         return recipients;
@@ -79,7 +82,6 @@ contract Splitz {
 
 
 
-    // function removeRecipient - 
 
 
 }
