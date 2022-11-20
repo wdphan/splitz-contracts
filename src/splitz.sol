@@ -2,19 +2,15 @@
 
 pragma solidity >=0.7.0 <0.9.0;
 
-/**
- * @title Storage
- * @dev Store & retrieve value in a variable
- * @custom:dev-run-script ./scripts/deploy_with_ethers.ts
- */
-
-
 contract Splitz {
 
     // stores list of recipients and their ids
     address payable [] public recipients;
 
     event TransferReceived(address _from, uint _amount);
+    event newSplit(address payable [] recipients, address owner);
+    event AddedRecipient(address recipientAdd);
+    event RemovedRecipient(address recipientRemove);
 
     address payable public splitOwner;
 
@@ -41,15 +37,17 @@ contract Splitz {
         }
         // sets splitOwner
         splitOwner = _owner;
+        emit newSplit(newRecipients, _owner);
     }
 
     // add recipient with address
-    function addRecipient( address payable newRecipient) external {
+    function addRecipient( address payable newRecipient) onlyOwner external {
         recipients.push(newRecipient);
+        emit AddedRecipient(newRecipient);
     }
 
     // remove recipient with address
-    function removeRecipient(address payable recipient) external {
+    function removeRecipient(address payable recipient) onlyOwner external {
         uint index = addressToUint[recipient];
 
        require(index < recipients.length, "index out of bound");
@@ -58,6 +56,7 @@ contract Splitz {
             recipients[i] = recipients[i + 1];
         }
         recipients.pop();
+        emit RemovedRecipient(recipient);
     }
 
     function splitRecipients() public view returns (address payable [] memory) {
