@@ -6,4 +6,4 @@ This was an upgrade compared to my tip-distribution contract. As a mini-implemen
 
 This project was done in participation of the [Canto Monthly Hackathon](https://mobile.twitter.com/thecoh_). Although I didn't finish on time, it was a great learning experience!
 
-[Contract Source](src/splitz.sol)
+[Frontend]([src/splitz.sol](https://github.com/wdphan/splitz)) · [Contract Source](src/splitz.sol)
